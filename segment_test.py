@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 import cv2
+import time
 sys.path.append("..")
 from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
 
@@ -17,16 +18,21 @@ sam.to(device=device)
 mask_generator = SamAutomaticMaskGenerator(sam)
 
 # step 2
-image = cv2.imread('images/IMG_8794.JPG')
+image = cv2.imread('images/IMG_8797.JPG')
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 # plt.figure(figsize=(20,20))
 # plt.imshow(image)
 # plt.axis('off')
 # plt.show()
-
+start_ts = time.time()
+print("time start: ", time.strftime("%H:%M:%S", time.localtime(start_ts)))
 masks = mask_generator.generate(image)
+end_ts = time.time()
 print(len(masks))
 print(masks[0].keys())
+print("time end: ", time.strftime("%H:%M:%S", time.localtime(end_ts)))
+print(f"elapsed seconds: {end_ts - start_ts:.3f}")
+print("")
 # step 3
 def show_anns(anns):
     if len(anns) == 0:
